@@ -206,6 +206,9 @@ export function appendVM(vm: VM) {
 // while preventing any attempt to rehydration until after reinsertion.
 function resetComponentStateWhenRemoved(vm: VM) {
     const { state } = vm;
+    if (process.env.NODE_ENV !== 'production') {
+        removeActiveVM(vm);
+    }
     if (state !== VMState.disconnected) {
         const { oar, tro } = vm;
         // Making sure that any observing record will not trigger the rehydrated on this vm
@@ -225,7 +228,6 @@ function resetComponentStateWhenRemoved(vm: VM) {
 // old vnode.children is removed from the DOM.
 export function removeVM(vm: VM) {
     if (process.env.NODE_ENV !== 'production') {
-        removeActiveVM(vm);
         assert.isTrue(
             vm.state === VMState.connected || vm.state === VMState.disconnected,
             `${vm} must have been connected.`
