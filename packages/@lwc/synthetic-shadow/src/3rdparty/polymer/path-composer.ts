@@ -18,11 +18,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 import { isNull } from '@lwc/shared';
 import { getOwnerDocument } from '../../shared/utils';
 
-export function pathComposer(startNode: EventTarget, composed: boolean): EventTarget[] {
+export function pathComposer(startNode: Node, composed: boolean): EventTarget[] {
     const composedPath: EventTarget[] = [];
-    let current: EventTarget | null = startNode;
+    let current: Node | null = startNode;
     const startRoot: Window | Node =
-        startNode instanceof Window ? startNode : (startNode as Node).getRootNode();
+        startNode instanceof Window ? startNode : startNode.getRootNode();
     while (!isNull(current)) {
         composedPath.push(current);
 
@@ -48,10 +48,10 @@ export function pathComposer(startNode: EventTarget, composed: boolean): EventTa
     if (startNode instanceof Window) {
         doc = startNode.document;
     } else {
-        doc = getOwnerDocument(startNode as Node);
+        doc = getOwnerDocument(startNode);
     }
     // event composedPath includes window when startNode's ownerRoot is document
-    if ((composedPath[composedPath.length - 1] as any) === doc) {
+    if (composedPath[composedPath.length - 1] === doc) {
         composedPath.push(window);
     }
     return composedPath;
