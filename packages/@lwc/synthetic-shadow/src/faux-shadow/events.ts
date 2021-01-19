@@ -86,8 +86,8 @@ export function patchEvent(event: Event) {
         defineProperty(event, 'relatedTarget', {
             get(this: Event): EventTarget | null | undefined {
                 const eventContext = eventToContextMap.get(this);
-                const originalCurrentTarget = eventCurrentTargetGetter.call(this);
-                const relatedTarget = relatedTargetGetter.call(this);
+                const originalCurrentTarget = eventCurrentTargetGetter.call(this) as Node;
+                const relatedTarget = relatedTargetGetter.call(this) as Node | null;
                 if (isNull(relatedTarget)) {
                     return null;
                 }
